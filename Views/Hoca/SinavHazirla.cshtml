@@ -1,0 +1,67 @@
+﻿@model AkademikSinavPortali.Models.SinavHazirlamaViewModel
+@{
+    ViewData["Title"] = "Sınav Hazırlama";
+}
+
+<div class="container mt-4">
+    <h2 class="text-warning"><i class="bi bi-card-checklist"></i> Sınav Hazırlama ve Soru Atama</h2>
+    <hr />
+
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+
+    <form asp-action="SinavHazirla" method="post" class="shadow p-4 rounded bg-light border-top border-warning border-4">
+        <div class="row">
+            <div class="col-md-5 border-end">
+                <h4 class="mb-3">1. Sınav Bilgileri</h4>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Ders Seçin</label>
+                    <select asp-for="YeniSinav.DersId" class="form-select" asp-items="ViewBag.Dersler">
+                        <option value="">-- Ders Seçin --</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Sınav Adı</label>
+                    <input asp-for="YeniSinav.SinavAdi" class="form-control" placeholder="Örn: Veritabanı Vize" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Sınav Tarihi</label>
+                    <input asp-for="YeniSinav.SinavTarihi" type="datetime-local" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-md-7 ps-4">
+                <h4 class="mb-3">2. Soruları Seçin</h4>
+                <div style="max-height: 400px; overflow-y: auto;" class="p-2 border rounded bg-white">
+                    <table class="table table-sm table-hover">
+                        <thead class="sticky-top bg-white">
+                            <tr>
+                                <th style="width: 40px;">Seç</th>
+                                <th>Soru Metni</th>
+                                <th style="width: 60px;">Puan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var soru in Model.MevcutSorular)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="SecilenSoruIdleri" value="@soru.SoruId" class="form-check-input" />
+                                    </td>
+                                    <td>@soru.SoruMetni</td>
+                                    <td class="badge bg-secondary mt-1">@soru.Puan</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold">Sınavı Oluştur ve Soruları Kaydet</button>
+        </div>
+    </form>
+</div>

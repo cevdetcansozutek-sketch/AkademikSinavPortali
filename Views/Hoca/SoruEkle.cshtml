@@ -1,0 +1,70 @@
+﻿@model AkademikSinavPortali.Models.Sorular
+@{
+    ViewData["Title"] = "Yeni Soru Ekle";
+}
+
+<div class="container mt-4">
+    <h2><i class="bi bi-plus-circle"></i> Yeni Soru Tanımla</h2>
+    <hr />
+
+    @if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-success">@TempData["Mesaj"]</div>
+    }
+
+    <form asp-action="SoruEkle" method="post" class="shadow p-4 rounded bg-light">
+        <div class="mb-3">
+            <label class="form-label fw-bold">Ders Seçiniz</label>
+            <select asp-for="DersId" class="form-select" asp-items="ViewBag.Dersler">
+                <option value="">-- Ders Seçin --</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Soru Metni</label>
+            <textarea asp-for="SoruMetni" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="SoruMetni" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">A Şıkkı</label>
+                <input asp-for="SecenekA" class="form-control" />
+                <span asp-validation-for="SecenekA" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">B Şıkkı</label>
+                <input asp-for="SecenekB" class="form-control" />
+                <span asp-validation-for="SecenekB" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">C Şıkkı</label>
+                <input asp-for="SecenekC" class="form-control" />
+                <span asp-validation-for="SecenekC" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">D Şıkkı</label>
+                <input asp-for="SecenekD" class="form-control" />
+                <span asp-validation-for="SecenekD" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-success">Doğru Cevap (A, B, C veya D)</label>
+                <input asp-for="DogruCevap" class="form-control text-uppercase" maxlength="1" />
+                <span asp-validation-for="DogruCevap" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-primary">Soru Puanı (0-100)</label>
+                <input asp-for="Puan" type="number" class="form-control" />
+                <span asp-validation-for="Puan" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Soruyu Veritabanına Kaydet</button>
+    </form>
+</div>

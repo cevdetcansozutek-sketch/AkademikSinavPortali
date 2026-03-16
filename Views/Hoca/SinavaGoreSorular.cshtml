@@ -1,0 +1,52 @@
+﻿@model IEnumerable<AkademikSinavPortali.Models.Sorular>
+@{
+    ViewData["Title"] = "Sınava Göre Sorular";
+}
+
+<div class="container mt-4">
+    <h2><i class="bi bi-funnel"></i> Sınava Göre Soru Filtreleme</h2>
+    <hr />
+
+    <form asp-action="SinavaGoreSorular" method="get" class="mb-4 bg-light p-3 border rounded">
+        <div class="row">
+            <div class="col-md-8">
+                <label class="form-label fw-bold">Sınav Seçiniz:</label>
+                <select name="secilenSinavId" class="form-select" asp-items="ViewBag.Sinavlar">
+                    <option value="">-- Lütfen Bir Sınav Seçin --</option>
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-dark w-100">
+                    Soruları Getir
+                </button>
+            </div>
+        </div>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-hover table-bordered shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Soru</th>
+                    <th>Doğru Cevap</th>
+                    <th>Puan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var soru in Model)
+                {
+                    <tr>
+                        <td>@soru.SoruMetni</td>
+                        <td class="text-center fw-bold text-success">@soru.DogruCevap</td>
+                        <td class="text-center">@soru.Puan</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else if (Context.Request.Query["secilenSinavId"].ToString() != "")
+    {
+        <div class="alert alert-warning">Bu sınava henüz hiç soru atanmamış.</div>
+    }
+</div>

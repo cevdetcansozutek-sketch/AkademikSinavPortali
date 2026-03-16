@@ -1,0 +1,77 @@
+﻿@model AkademikSinavPortali.Models.OgrenciAramaViewModel
+@{
+    ViewData["Title"] = "Öğrenci Arama";
+}
+
+<div class="container mt-4">
+    <h2><i class="bi bi-search"></i> Öğrenci Arama ve Sınav Geçmişi</h2>
+    <hr />
+
+    <form asp-action="OgrenciArama" method="get" class="mb-4 bg-light p-3 border rounded shadow-sm">
+        <div class="row">
+            <div class="col-md-9">
+                <input type="text" name="aranacakKelime" class="form-control form-control-lg" placeholder="Öğrenci No, Ad veya Soyad giriniz..." value="@Context.Request.Query["aranacakKelime"]" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-lg w-100">Öğrenci Bul</button>
+            </div>
+        </div>
+    </form>
+
+    @if (ViewBag.Mesaj != null)
+    {
+        <div class="alert alert-danger fw-bold"><i class="bi bi-exclamation-triangle"></i> @ViewBag.Mesaj</div>
+    }
+
+    @if (Model != null && Model.OgrenciBilgisi != null)
+    {
+        <div class="card mb-4 border-primary shadow">
+            <div class="card-header bg-primary text-white fw-bold fs-5">
+                Bulunan Öğrenci Bilgileri
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@Model.OgrenciBilgisi.Ad @Model.OgrenciBilgisi.Soyad</h5>
+                <p class="card-text text-muted"><strong>Öğrenci No:</strong> @Model.OgrenciBilgisi.OgrenciNo</p>
+            </div>
+        </div>
+
+        <h4 class="mb-3 text-secondary">Katıldığı Sınavlar</h4>
+
+        @if (Model.SinavSonuclari.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover shadow-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sınav Adı</th>
+                            <th>Sınav Tarihi</th>
+                            <th class="text-center">Toplam Puan</th>
+                            <th class="text-center">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sonuc in Model.SinavSonuclari)
+                        {
+                            <tr>
+                                <td class="align-middle">@sonuc.SinavAdi</td>
+                                <td class="align-middle">@sonuc.SinavTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td class="text-center align-middle fw-bold fs-5 @(sonuc.ToplamPuan >= 50 ? "text-success" : "text-danger")">
+                                    @sonuc.ToplamPuan
+                                </td>
+                                <td class="text-center align-middle">
+                                    <a asp-action="SinavAnaliz" asp-route-ogrenciId="@Model.OgrenciBilgisi.OgrenciId" asp-route-sinavId="@sonuc.SinavId" class="btn btn-sm btn-info text-white fw-bold">
+                                        Detaylı Analiz
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">Öğrenci henüz sisteme kaydedilmiş hiçbir sınava katılmamış.</div>
+        }
+    }
+</div>
